@@ -11,11 +11,13 @@ import java.util.Optional;
 public class Renderer3D implements GPURenderer {
 
     private Raster raster;
+    private Graphics2D g2;
     private Mat4 model, view, projection;
 
 
     public Renderer3D(Raster raster) {
         this.raster = raster;
+        g2 = raster.getG2();
         model = new Mat4Identity();
         view = new Mat4Identity();
         projection = new Mat4Identity();
@@ -58,12 +60,12 @@ public class Renderer3D implements GPURenderer {
         v1 = transformToWindow(v1);
         v2 = transformToWindow(v2);
 
-        raster.drawLine(
+        g2.setColor(color);
+        g2.drawLine(
                 (int) Math.round(v1.getX()),
                 (int) Math.round(v1.getY()),
                 (int) Math.round(v2.getX()),
-                (int) Math.round(v2.getY()),
-                Color.YELLOW);
+                (int) Math.round(v2.getY()));
 
     }
 
@@ -78,8 +80,7 @@ public class Renderer3D implements GPURenderer {
         return vec
                 .mul(new Vec3D(1, -1, 1)) // Y jde nahoru a my ho chceme dolu
                 .add(new Vec3D(1, 1, 0)) // posun nahoru doleva z prostred
-                .mul(new Vec3D(800/2f, 600/2f, 1)); // prizpusobeni nasi obrazovce
-                //TODO bude predelat na konstanty
+                .mul(new Vec3D(raster.getScreenSize().width/2f, raster.getScreenSize().height/2f, 1)); // prizpusobeni nasi obrazovce
     }
 
     @Override

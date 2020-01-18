@@ -10,7 +10,7 @@ import java.util.List;
 public abstract class Solid {
 
     final List<Point3D> vertices = new ArrayList<>();
-    final  List<Integer> indices = new ArrayList<>();
+    final List<Integer> indices = new ArrayList<>();
     Color color;
 
     final void addIndices(Integer... toAdd) {

@@ -1,7 +1,5 @@
 package view;
 
-import transforms.Col;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,13 +10,16 @@ public class Raster extends JPanel {
 
     private final BufferedImage img; // objekt pro zápis pixelů
     private final Graphics g; // objekt nad kterým jsou k dispozici grafické funkce
+    private final Dimension screenSize = new Dimension(1000, 800);
     private static final int FPS = 1000 / 30;
+    private final Graphics2D g2;
 
     public Raster() {
-        setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(screenSize);
         // inicializace image, nastavení rozměrů (nastavení typu - pro nás nedůležité)
-        img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
+        img = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_RGB);
         g = img.getGraphics();
+        g2 = (Graphics2D) g;
         setLoop();
         clear();
     }
@@ -41,21 +42,15 @@ public class Raster extends JPanel {
     }
 
     public void clear() {
-        g.setColor(Color.GRAY);
-        g.fillRect(0, 0, 800, 600);
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, screenSize.width, screenSize.height);
     }
 
-    public void drawPixel(int x, int y, int color) {
-        img.setRGB(x, y, color);
+    public Graphics2D getG2() {
+        return g2;
     }
 
-    public int getPixelColor(int x, int y) {
-        return img.getRGB(x, y);
+    public Dimension getScreenSize() {
+        return screenSize;
     }
-
-    public void drawLine(int x1, int y1, int x2, int y2, Color color) {
-        g.setColor(color);
-        g.drawLine(x1, y1, x2, y2);
-    }
-
 }
