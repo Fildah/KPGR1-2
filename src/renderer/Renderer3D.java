@@ -46,8 +46,21 @@ public class Renderer3D implements GPURenderer {
         a = a.mul(model).mul(view).mul(projection);
         b = b.mul(model).mul(view).mul(projection);
 
-        if (clip(a)) return;
-        if (clip(b)) return;
+        if (a.getW() > b.getW()){
+            Point3D temp = a;
+            a=b;
+            b=temp;
+        }
+
+
+        if (b.getW() < 0.1){
+            return;
+        }
+
+        if (a.getW() < 0.1){
+            double t = (0.1-a.getW())/(b.getW()-a.getW());
+            a = a.mul(1-t).add(a.mul(t));
+        }
 
         Optional<Vec3D> dehomogA = a.dehomog();
         Optional<Vec3D> dehomogB = b.dehomog();
@@ -67,13 +80,6 @@ public class Renderer3D implements GPURenderer {
                 (int) Math.round(v2.getX()),
                 (int) Math.round(v2.getY()));
 
-    }
-
-    private boolean clip(Point3D p) {
-        if (p.getW() < p.getX() || p.getX() < -p.getW()) return true;
-        if (p.getW() < p.getY() || p.getY() < -p.getW()) return true;
-        if (p.getW() < p.getZ() || p.getZ() < 0) return true;
-        return false;
     }
 
     private Vec3D transformToWindow(Vec3D vec) {

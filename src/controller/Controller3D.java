@@ -20,7 +20,7 @@ import java.util.Set;
 public class Controller3D {
 
     private final GPURenderer renderer;
-    private Mat4 model, view, projection;
+    private Mat4 model, view, projection, projectionPersp, projectionOrtho;
     private Camera camera;
     private final List<Solid> solids;
     private int startX = -3000;
@@ -36,9 +36,10 @@ public class Controller3D {
                 .withPosition(new Vec3D(3, -6, 3))  // pozice kamery)
                 .withAzimuth(Math.toRadians(90)) // osa x 360
                 .withZenith(Math.toRadians(-20)); // osa y zenit nesmi byt max +/- 90 stupnu
-        projection = new Mat4PerspRH(Math.PI / 3, (float) raster.getScreenSize().height/raster.getScreenSize().width, 0.1, 20);
 
-        // projection = new Mat4OrthoRH(800, 600, 0.1, 20); // ukazka ortho
+        projectionPersp = new Mat4PerspRH(Math.PI / 3, (float) raster.getScreenSize().height/raster.getScreenSize().width, 0.1, 20);
+        projectionOrtho = new Mat4OrthoRH(raster.getScreenSize().width/60.0, raster.getScreenSize().height/60.0, 0.1, 200);
+        projection = projectionPersp;
 
         initListeners(raster);
 
@@ -113,6 +114,12 @@ public class Controller3D {
 
             @Override
             public void keyTyped(KeyEvent e) {
+                if (e.getKeyChar() == 'o') {
+                    projection = projectionOrtho;
+                }
+                if (e.getKeyChar() == 'p') {
+                    projection = projectionPersp;
+                }
             }
 
             @Override
