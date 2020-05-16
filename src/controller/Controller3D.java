@@ -1,16 +1,11 @@
 package controller;
 
-import mode3d.Cross;
-import mode3d.Cube;
-import mode3d.Pyramid;
-import mode3d.Solid;
-import model.Point;
+import mode3d.*;
 import renderer.GPURenderer;
 import renderer.Renderer3D;
 import transforms.*;
 import view.Raster;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,6 +45,8 @@ public class Controller3D {
         solids.add(new Cross('z'));
         solids.add(new Cross('y'));
         solids.add(new Cross('x'));
+
+        solids.add(new BezierCurve());
 
         display();
     }
@@ -120,6 +117,19 @@ public class Controller3D {
                 if (e.getKeyChar() == 'p') {
                     projection = projectionPersp;
                 }
+                if (e.getKeyChar() == 'b') {
+                    solids.remove(solids.size() - 1);
+                    solids.add(new BezierCurve());
+                }
+                if (e.getKeyChar() == 'n') {
+                    solids.remove(solids.size() - 1);
+                    solids.add(new CoonsCurve());
+                }
+                if (e.getKeyChar() == 'm') {
+                    solids.remove(solids.size() - 1);
+                    solids.add(new FergusonCurve());
+                }
+                display();
             }
 
             @Override
